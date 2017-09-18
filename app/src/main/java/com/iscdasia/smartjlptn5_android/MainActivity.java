@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity
 
     private ArrayList<Question> resultQuestionList;
 
+    private RecyclerView recyclerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity
             initLocalStore().get();
 
             // Create an adapter to bind the items with the view
-            mAdapter = new ToDoItemAdapter(this, R.layout.fragment_questionlist);
+            //mAdapter = new ToDoItemAdapter(this, R.layout.fragment_questionlist);
 //            ListView listViewToDo = (ListView) findViewById(R.id.listViewToDo);
 //            listViewToDo.setAdapter(mAdapter);
 
@@ -246,7 +249,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Question item) {
-
+        Toast.makeText(this, "Click " + item.getId(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -263,10 +266,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void OnFragmentViewBinding(View view,int columnCount, QuestionListFragment.OnListFragmentInteractionListener onListListener) {
-
         if (view instanceof RecyclerView) {
             Context context =  view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             if (columnCount <= 1) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
             } else {
@@ -284,10 +286,7 @@ public class MainActivity extends AppCompatActivity
             resultQuestionList.add(q2);
 
             recyclerView.setAdapter(new MyQuestionListRecyclerViewAdapter(resultQuestionList, onListListener));
-
         }
-
-
     }
 
     /**
@@ -354,10 +353,11 @@ public class MainActivity extends AppCompatActivity
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            mAdapter.clear();
+                            //mAdapter.clear();
+                            resultQuestionList.clear();
 
                             for (Question item : results) {
-                                mAdapter.add(item);
+                                //mAdapter.add(item);
                                 resultQuestionList.add(item);
                             }
                         }
@@ -367,6 +367,13 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+                if(recyclerView != null)
+                    recyclerView.getAdapter().notifyDataSetChanged();
             }
         };
 
