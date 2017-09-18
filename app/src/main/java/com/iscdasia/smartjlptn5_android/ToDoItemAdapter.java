@@ -10,6 +10,9 @@ import android.widget.CheckBox;
 
 import com.iscdasia.smartjlptn5_android.R;
 
+import java.util.List;
+
+
 /**
  * Adapter to bind a ToDoItem List to a view
  */
