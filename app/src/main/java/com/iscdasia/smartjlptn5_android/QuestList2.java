@@ -118,16 +118,17 @@ public class QuestList2 extends Activity {
             ArrayList<Question> resultQuestionList = new ArrayList<>();
             Question q1 = new Question();
             q1.setId("1");
-            q1.setQuestionText("AA");
+            q1.setQuestionText("AA1");
 
             Question q2 = new Question();
             q2.setId("2");
-            q2.setQuestionText("BB");
+            q2.setQuestionText("BB2");
 
             resultQuestionList.add(q1);
             resultQuestionList.add(q2);
 
             RecyclerView rlistViewToDo = (RecyclerView) findViewById(R.id.rlist2);
+            //rlistViewToDo.setAdapter(new MyQuestionListRecyclerViewAdapter(resultQuestionList, null));
             rlistViewToDo.setAdapter(new MyQuestionListRecyclerViewAdapter(resultQuestionList, null));
 
             // Load the items from the Mobile Service

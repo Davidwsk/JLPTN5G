@@ -10,4 +10,5 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="com.iscdasia.smartjlptn5_android.QuestionListFragment"
-    tools:listitem="@layout/fragment_questionlist" />
+    tools:listitem="@layout/fragment_questionlist"
+    />

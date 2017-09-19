@@ -64,23 +64,22 @@ public class QuestionListFragment extends Fragment {
 // ie we are sending "Fragment 1" as title parameter when fragment1 is activated
         if (mListener != null) {
             mListener.onFragmentInteraction("Questions");
-            mListener.OnFragmentViewBinding(view,mColumnCount,mListener);
         }
 // Here we will can create click listners etc for all the gui elements on the fragment.
 // For eg: Button btn1= (Button) view.findViewById(R.id.frag1_btn1);
 // btn1.setOnclickListener(...
 
-//        // Set the adapter
-//        if (view instanceof RecyclerView) {
-//            Context context = view.getContext();
-//            RecyclerView recyclerView = (RecyclerView) view;
-//            if (mColumnCount <= 1) {
-//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//            } else {
-//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-//            }
-//            recyclerView.setAdapter(new MyQuestionListRecyclerViewAdapter(DummyContent.ITEMS, mListener));
-//        }
+        // Set the adapter
+        if (view instanceof RecyclerView) {
+            Context context = view.getContext();
+            RecyclerView recyclerView = (RecyclerView) view;
+            if (mColumnCount <= 1) {
+                recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            } else {
+                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
+            }
+            recyclerView.setAdapter(new MyQuestionListRecyclerViewAdapter(DataAccess.QUESTION_ARRAY_LIST, mListener));
+        }
         return view;
     }
 
@@ -118,8 +117,6 @@ public class QuestionListFragment extends Fragment {
 
         // NOTE : We changed the Uri to String.
         void onFragmentInteraction(String title);
-
-        void OnFragmentViewBinding(View view,int columnCount,OnListFragmentInteractionListener onListListener);
     }
 }
 
