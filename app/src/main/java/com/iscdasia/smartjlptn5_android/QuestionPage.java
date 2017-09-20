@@ -1,12 +1,22 @@
 package com.iscdasia.smartjlptn5_android;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.NavUtils;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import static android.R.id.toggle;
 
 
 /**
@@ -61,12 +71,25 @@ public class QuestionPage extends Fragment {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getActivity().onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_question_page, container, false);
 
-         inflater.inflate(R.layout.fragment_questionlist_list, container, false);
+        Toolbar toolbar = (Toolbar)view.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // NOTE : We are calling the onFragmentInteraction() declared in the MainActivity
 // ie we are sending "Fragment 1" as title parameter when fragment1 is activated
@@ -114,4 +137,6 @@ public class QuestionPage extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(String title);
     }
+
+
 }

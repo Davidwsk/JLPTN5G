@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebViewFragment;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -93,7 +96,13 @@ public class MainActivity extends AppCompatActivity
 
     private String QUESTION_GROUP_ID = "1";
 
-    private  int NO_OF_QUESTION = 10;
+    private int NO_OF_QUESTION = 10;
+
+    private final static String TAG = MainActivity.class.getSimpleName();
+
+    private NavigationView navigationView;
+
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,7 +150,7 @@ public class MainActivity extends AppCompatActivity
 //            listViewToDo.setAdapter(mAdapter);
 
             // Load the items from the Mobile Service
-            refreshItemsFromTable(QUESTION_GROUP_ID,NO_OF_QUESTION);
+            refreshItemsFromTable(QUESTION_GROUP_ID, NO_OF_QUESTION);
 
         } catch (MalformedURLException e) {
             createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -153,6 +162,8 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -163,21 +174,35 @@ public class MainActivity extends AppCompatActivity
 //        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        //drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         //NOTE:  Checks first item in the navigation drawer initially
-        navigationView.setCheckedItem(R.id.nav_question_list);
+        //navigationView.setCheckedItem(R.id.nav_question_list);
 
 //        //NOTE:  Open fragment1 initially.
 //        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 //        ft.replace(R.id.mainFrame, new QuestionListFragment());
 //        ft.commit();
+
+
+//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//
+//            @Override
+//            public void onBackStackChanged() {
+//                Fragment f = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+//                if (f != null) {
+//                    int aa = 0;
+//                }
+//
+//            }
+//        });
     }
 
     @Override
@@ -186,9 +211,42 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+            if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+                finish();
+            } else {
+
+                getSupportFragmentManager().popBackStackImmediate();
+                currentFragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
+                refreshSelectedMenuItem(currentFragment);
+                toggle.setDrawerIndicatorEnabled(true);;
+
+
+            }
+            //super.onBackPressed();
         }
     }
+
+    /**
+     * Method that refreshes the selected menu item on back
+     *
+     * @param currentFragment The currentFragment
+     */
+    private final void refreshSelectedMenuItem(Fragment currentFragment) {
+
+        if (currentFragment != null) {
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(currentFragment instanceof QuestionPage == true);
+            }
+        }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -207,10 +265,8 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
-        else if(id == R.id.action_getQuestion)
-        {
-            refreshItemsFromTable(QUESTION_GROUP_ID,NO_OF_QUESTION);
+        } else if (id == R.id.action_getQuestion) {
+            refreshItemsFromTable(QUESTION_GROUP_ID, NO_OF_QUESTION);
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
             recyclerView.getAdapter().notifyDataSetChanged();
         }
@@ -224,9 +280,10 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         //NOTE: creating fragment object
-        Fragment fragment = null;
+        //Fragment fragment = null;
         if (id == R.id.nav_question_list) {
-            fragment = new QuestionListFragment();
+            replaceFragment(QuestionListFragment.class);
+            //fragment = new QuestionListFragment();
         } else if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
@@ -241,27 +298,71 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        //NOTE: Fragment changing code
-        if (fragment != null) {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.mainFrame, fragment);
-            ft.commit();
-
-            setTitle("");
-        }
+//        //NOTE: Fragment changing code
+//        if (fragment != null) {
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.replace(R.id.mainFrame, fragment);
+//            ft.commit();
+//
+//            setTitle("");
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
+    /**
+     * Method that replaces the current fragment
+     *
+     //* @param item          The new menu item selected
+     * @param fragmentClass The new fragment class
+     */
+    private final void replaceFragment(@NonNull Class<? extends Fragment> fragmentClass)
+    {
+        // Hide the in-app layout if it's visible
+        //hideNotificationOverlay();
+
+        //updateSelection(item);
+
+        try
+        {
+            final Fragment fragment = fragmentClass.newInstance();
+
+            if (getSupportActionBar() != null)
+            {
+                //getSupportActionBar().setTitle(item.getTitle());
+                //getSupportActionBar().setDisplayShowTitleEnabled(fragment instanceof QuestionPage == false);
+                //getSupportActionBar().setDisplayShowHomeEnabled(fragment instanceof QuestionPage == false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(fragment instanceof QuestionPage == true);
+                getSupportActionBar().setHomeButtonEnabled(fragment instanceof QuestionPage == false);
+
+
+            }
+
+            final String backStateName = fragment.getClass().getName();
+
+            final FragmentManager fragmentManager = getSupportFragmentManager();
+            final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
+
+            if (fragmentPopped == false)
+            {
+                //fragment not in back stack, create it.
+                final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.mainFrame, fragment);
+                fragmentTransaction.addToBackStack(backStateName);
+                fragmentTransaction.commit();
+            }
+        }
+        catch (Exception exception)
+        {
+            Log.e(MainActivity.TAG, "Unable to instantiate the fragment with class '" + fragmentClass.getSimpleName() + "'");
+        }
+    }
+
     @Override
     public void onListFragmentInteraction(Question item) {
-        Fragment fragment = new QuestionPage();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.mainFrame, fragment);
-        ft.addToBackStack(null);
-        ft.commit();
+        replaceFragment(QuestionPage.class);
     }
 
     @Override
@@ -296,12 +397,12 @@ public class MainActivity extends AppCompatActivity
                     tableDefinition.put("id", ColumnDataType.String);
                     tableDefinition.put("questionText", ColumnDataType.String);
                     tableDefinition.put("deleted", ColumnDataType.Boolean);
-                    tableDefinition.put("questionGroupId",ColumnDataType.String);
-                    tableDefinition.put("correctAnswer",ColumnDataType.String);
-                    tableDefinition.put("wrongAnswer1",ColumnDataType.String);
-                    tableDefinition.put("wrongAnswer2",ColumnDataType.String);
-                    tableDefinition.put("wrongAnswer3",ColumnDataType.String);
-                    tableDefinition.put("description",ColumnDataType.String);
+                    tableDefinition.put("questionGroupId", ColumnDataType.String);
+                    tableDefinition.put("correctAnswer", ColumnDataType.String);
+                    tableDefinition.put("wrongAnswer1", ColumnDataType.String);
+                    tableDefinition.put("wrongAnswer2", ColumnDataType.String);
+                    tableDefinition.put("wrongAnswer3", ColumnDataType.String);
+                    tableDefinition.put("description", ColumnDataType.String);
 
                     localStore.defineTable("Question", tableDefinition);
 
@@ -347,13 +448,12 @@ public class MainActivity extends AppCompatActivity
                             int count = 0;
 
                             int canBeSelectedCount = results.size();
-                            while (count < noOfQuestions && count < canBeSelectedCount)
-                            {
+                            while (count < noOfQuestions && count < canBeSelectedCount) {
                                 int iRnd = rnd.nextInt(canBeSelectedCount);
                                 Question xx = results.get(iRnd);
                                 //if (result.Contains(xx))
                                 if (DataAccess.QUESTION_ARRAY_LIST.contains(xx))
-                                continue;
+                                    continue;
                                 DataAccess.QUESTION_ARRAY_LIST.add(xx);
                                 count++;
                             }
@@ -375,10 +475,12 @@ public class MainActivity extends AppCompatActivity
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
-                //NOTE:  Open fragment1 initially.
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.mainFrame, new QuestionListFragment());
-                ft.commit();
+                replaceFragment(QuestionListFragment.class);
+
+//                //NOTE:  Open fragment1 initially.
+//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                ft.replace(R.id.mainFrame, new QuestionListFragment());
+//                ft.commit();
 
 //                if(recyclerView != null)
 //                    recyclerView.getAdapter().notifyDataSetChanged();
