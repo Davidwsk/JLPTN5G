@@ -1,6 +1,7 @@
 package com.iscdasia.smartjlptn5_android;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity
         //Note : OnFragmentInteractionListener of all the fragments
         implements
         QuestionListFragment.OnListFragmentInteractionListener,
+        QuestionPage.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     /**
@@ -88,6 +90,10 @@ public class MainActivity extends AppCompatActivity
     private ProgressBar mProgressBar;
 
     private RecyclerView recyclerView;
+
+    private String QUESTION_GROUP_ID = "1";
+
+    private  int NO_OF_QUESTION = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +141,7 @@ public class MainActivity extends AppCompatActivity
 //            listViewToDo.setAdapter(mAdapter);
 
             // Load the items from the Mobile Service
-            refreshItemsFromTable("1",5);
+            refreshItemsFromTable(QUESTION_GROUP_ID,NO_OF_QUESTION);
 
         } catch (MalformedURLException e) {
             createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -202,6 +208,12 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        else if(id == R.id.action_getQuestion)
+        {
+            refreshItemsFromTable(QUESTION_GROUP_ID,NO_OF_QUESTION);
+            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
+            recyclerView.getAdapter().notifyDataSetChanged();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -245,7 +257,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onListFragmentInteraction(Question item) {
-        Toast.makeText(this, "Click " + item.getId(), Toast.LENGTH_SHORT).show();
+        Fragment fragment = new QuestionPage();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.mainFrame, fragment);
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     @Override
