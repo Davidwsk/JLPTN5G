@@ -5,17 +5,23 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.Toolbar;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import static android.R.id.toggle;
 import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
@@ -29,7 +35,8 @@ import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
  * Use the {@link QuestionPage#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QuestionPage extends Fragment {
+public class QuestionPage extends Fragment
+        implements RadioGroup.OnCheckedChangeListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -71,15 +78,25 @@ public class QuestionPage extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         FragmentQuestionPageBinding fragmentQuestionPageBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_question_page,container,false);
         fragmentQuestionPageBinding.setQuestion(DataAccess.QUESTION_ARRAY_LIST.get(CurrentApp.CURRENT_QUESTION_POSITION_ID));
 
+        RadioGroup rg = (RadioGroup) fragmentQuestionPageBinding.getRoot().findViewById(R.id.rdoGroupAnswer);
+        rg.setOnCheckedChangeListener(this);
+        RadioButton radioButton = new RadioButton(getContext());
+        radioButton.setText("@{question.QuestionText}");
+        //radioButton.setId(1234);//set radiobutton id and store it somewhere
+        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+        rg.addView(radioButton, params);
 
         // Inflate the layout for this fragment
         //View view = inflater.inflate(R.layout.fragment_question_page, container, false);
@@ -117,6 +134,16 @@ public class QuestionPage extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId) {
+            case R.id.drawer_layout: {
+                int i = 1;
+                break;
+            }
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -134,3 +161,5 @@ public class QuestionPage extends Fragment {
 
 
 }
+
+
