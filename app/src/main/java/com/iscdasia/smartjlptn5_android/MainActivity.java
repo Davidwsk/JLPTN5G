@@ -94,15 +94,17 @@ public class MainActivity extends AppCompatActivity
 
     private RecyclerView recyclerView;
 
-    private String QUESTION_GROUP_ID = "1";
 
-    private int NO_OF_QUESTION = 10;
 
     private final static String TAG = MainActivity.class.getSimpleName();
 
     private NavigationView navigationView;
 
     private ActionBarDrawerToggle toggle;
+
+    private boolean mToolBarNavigationListenerIsRegistered = false;
+
+    private  Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +152,7 @@ public class MainActivity extends AppCompatActivity
 //            listViewToDo.setAdapter(mAdapter);
 
             // Load the items from the Mobile Service
-            refreshItemsFromTable(QUESTION_GROUP_ID, NO_OF_QUESTION);
+            refreshItemsFromTable(CurrentApp.QUESTION_GROUP_ID, CurrentApp.NO_OF_QUESTION);
 
         } catch (MalformedURLException e) {
             createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -161,8 +163,6 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-
 
         //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -185,24 +185,6 @@ public class MainActivity extends AppCompatActivity
 
         //NOTE:  Checks first item in the navigation drawer initially
         //navigationView.setCheckedItem(R.id.nav_question_list);
-
-//        //NOTE:  Open fragment1 initially.
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(R.id.mainFrame, new QuestionListFragment());
-//        ft.commit();
-
-
-//        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-//
-//            @Override
-//            public void onBackStackChanged() {
-//                Fragment f = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
-//                if (f != null) {
-//                    int aa = 0;
-//                }
-//
-//            }
-//        });
     }
 
     @Override
@@ -228,6 +210,61 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
+     * To be semantically or contextually correct, maybe change the name
+     * and signature of this function to something like:
+     *
+     * private void showBackButton(boolean show)
+     * Just a suggestion.
+     */
+    private void enableViews(boolean enable) {
+
+        // To keep states of ActionBar and ActionBarDrawerToggle synchronized,
+        // when you enable on one, you disable on the other.
+        // And as you may notice, the order for this operation is disable first, then enable - VERY VERY IMPORTANT.
+        if(enable) {
+            // Remove hamburger
+            toggle.setDrawerIndicatorEnabled(false);
+            // Show back button
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            if(menu != null)
+                menu.setGroupVisible(R.id.main_menu_group,false);
+            // when DrawerToggle is disabled i.e. setDrawerIndicatorEnabled(false), navigation icon
+            // clicks are disabled i.e. the UP button will not work.
+            // We need to add a listener, as in below, so DrawerToggle will forward
+            // click events to this listener.
+            if(!mToolBarNavigationListenerIsRegistered) {
+                toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Doesn't have to be onBackPressed
+                        onBackPressed();
+                    }
+                });
+
+                mToolBarNavigationListenerIsRegistered = true;
+            }
+
+        } else {
+            // Remove back button
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            // Show hamburger
+            toggle.setDrawerIndicatorEnabled(true);
+            // Remove the/any drawer toggle listener
+            toggle.setToolbarNavigationClickListener(null);
+            mToolBarNavigationListenerIsRegistered = false;
+            if(menu != null)
+                menu.setGroupVisible(R.id.main_menu_group,true);
+        }
+
+        // So, one may think "Hmm why not simplify to:
+        // .....
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(enable);
+        // mDrawer.setDrawerIndicatorEnabled(!enable);
+        // ......
+        // To re-iterate, the order in which you enable and disable views IS important #dontSimplify.
+    }
+
+    /**
      * Method that refreshes the selected menu item on back
      *
      * @param currentFragment The currentFragment
@@ -236,7 +273,8 @@ public class MainActivity extends AppCompatActivity
 
         if (currentFragment != null) {
             if (getSupportActionBar() != null) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(currentFragment instanceof QuestionPage == true);
+                enableViews(currentFragment instanceof QuestionPage == true);
+                //getSupportActionBar().setDisplayHomeAsUpEnabled(currentFragment instanceof QuestionPage == true);
             }
         }
     }
@@ -251,6 +289,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        this.menu = menu;
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -266,7 +305,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_getQuestion) {
-            refreshItemsFromTable(QUESTION_GROUP_ID, NO_OF_QUESTION);
+            refreshItemsFromTable(CurrentApp.QUESTION_GROUP_ID, CurrentApp.NO_OF_QUESTION);
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
             recyclerView.getAdapter().notifyDataSetChanged();
         }
@@ -331,13 +370,7 @@ public class MainActivity extends AppCompatActivity
 
             if (getSupportActionBar() != null)
             {
-                //getSupportActionBar().setTitle(item.getTitle());
-                //getSupportActionBar().setDisplayShowTitleEnabled(fragment instanceof QuestionPage == false);
-                //getSupportActionBar().setDisplayShowHomeEnabled(fragment instanceof QuestionPage == false);
-                getSupportActionBar().setDisplayHomeAsUpEnabled(fragment instanceof QuestionPage == true);
-                getSupportActionBar().setHomeButtonEnabled(fragment instanceof QuestionPage == false);
-
-
+                enableViews(fragment instanceof QuestionPage == true);
             }
 
             final String backStateName = fragment.getClass().getName();

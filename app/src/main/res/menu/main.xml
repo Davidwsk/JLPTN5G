@@ -1,9 +1,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto" >
-    <item
-        android:id="@+id/action_getQuestion"
-        app:showAsAction="always"
-        android:title="@string/get_question" />
+    <group android:id="@+id/main_menu_group">
+        <item
+            android:id="@+id/action_getQuestion"
+            app:showAsAction="always"
+            android:title="@string/get_question" />
+    </group>
+
     <!--<item-->
         <!--android:id="@+id/action_example"-->
         <!--android:showAsAction="withText"-->
