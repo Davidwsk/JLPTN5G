@@ -11,11 +11,77 @@
 <FrameLayout android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@{question.QuestionText}" />
+        android:orientation="vertical">
+        <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{question.QuestionText}" />
+
+        <RadioGroup
+            android:id="@+id/rdoGroupAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@{question.correctAnswer}" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@{question.wrongAnswer1}" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@{question.wrongAnswer2}" />
+
+            <android.support.v7.widget.AppCompatRadioButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@{question.wrongAnswer3}" />
+        </RadioGroup>
+
+    </LinearLayout>
+
+
+
+    <!--<ListView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" >-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<android.support.v7.widget.AppCompatRadioButton-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:text="0"/>-->
+
+            <!--&lt;!&ndash;<android.support.v7.widget.AppCompatRadioButton&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="1"/>&ndash;&gt;-->
+
+            <!--&lt;!&ndash;<android.support.v7.widget.AppCompatRadioButton&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="2"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;&ndash;&gt;-->
+            <!--&lt;!&ndash;<android.support.v7.widget.AppCompatRadioButton&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="3"/>&ndash;&gt;-->
+
+        <!--</LinearLayout>-->
+    <!--</ListView>-->
 
 </FrameLayout>
     </layout>

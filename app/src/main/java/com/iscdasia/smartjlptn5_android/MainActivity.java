@@ -59,9 +59,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.*;
 
-import com.iscdasia.smartjlptn5_android.databinding.ActivityMainBinding;
-import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
-
 public class MainActivity extends AppCompatActivity
         //Note : OnFragmentInteractionListener of all the fragments
         implements
