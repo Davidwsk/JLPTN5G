@@ -2,6 +2,7 @@ package com.iscdasia.smartjlptn5_android;
 
 import android.content.Context;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import static android.R.id.toggle;
+import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
 
 
 /**
@@ -68,20 +70,27 @@ public class QuestionPage extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        FragmentQuestionPageBinding fragmentQuestionPageBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_question_page,container,false);
+        fragmentQuestionPageBinding.setQuestion(DataAccess.QUESTION_ARRAY_LIST.get(CurrentApp.CURRENT_QUESTION_POSITION_ID));
+
+
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_question_page, container, false);
+        //View view = inflater.inflate(R.layout.fragment_question_page, container, false);
 
         // NOTE : We are calling the onFragmentInteraction() declared in the MainActivity
 // ie we are sending "Fragment 1" as title parameter when fragment1 is activated
         if (mListener != null) {
             mListener.onFragmentInteraction("Question");
         }
-        return view;
+
+        return fragmentQuestionPageBinding.getRoot();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

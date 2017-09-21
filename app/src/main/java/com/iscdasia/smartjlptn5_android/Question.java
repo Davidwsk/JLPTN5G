@@ -38,7 +38,7 @@ public class Question {
     }
 
     @com.google.gson.annotations.SerializedName("questionText")
-    private String mQuestionText;
+    public String mQuestionText;
 
     public String getQuestionText() {
         return mQuestionText;

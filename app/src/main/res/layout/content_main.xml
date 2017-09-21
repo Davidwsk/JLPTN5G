@@ -7,7 +7,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.iscdasia.smartjlptn5_android.MainActivity"
     tools:showIn="@layout/app_bar_main">
-
     <!-- Note : This is the container Frame Layout for all the fragmetns-->
     <FrameLayout
         android:layout_width="match_parent"

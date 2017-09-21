@@ -6,7 +6,7 @@ package com.iscdasia.smartjlptn5_android;
 
 public class CurrentApp {
 
-    public  static final int CURRENT_QUESTION_POSITION_ID = 0;
+    public  static int CURRENT_QUESTION_POSITION_ID = 0;
 
     public  static String QUESTION_GROUP_ID = "1";
 

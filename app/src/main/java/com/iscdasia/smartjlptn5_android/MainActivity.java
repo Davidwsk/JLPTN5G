@@ -2,6 +2,7 @@ package com.iscdasia.smartjlptn5_android;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebViewFragment;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -56,6 +58,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static com.microsoft.windowsazure.mobileservices.table.query.QueryOperations.*;
+
+import com.iscdasia.smartjlptn5_android.databinding.ActivityMainBinding;
+import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
 
 public class MainActivity extends AppCompatActivity
         //Note : OnFragmentInteractionListener of all the fragments
@@ -95,7 +100,6 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recyclerView;
 
 
-
     private final static String TAG = MainActivity.class.getSimpleName();
 
     private NavigationView navigationView;
@@ -104,7 +108,7 @@ public class MainActivity extends AppCompatActivity
 
     private boolean mToolBarNavigationListenerIsRegistered = false;
 
-    private  Menu menu;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,7 +205,8 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().popBackStackImmediate();
                 currentFragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                 refreshSelectedMenuItem(currentFragment);
-                toggle.setDrawerIndicatorEnabled(true);;
+                toggle.setDrawerIndicatorEnabled(true);
+                ;
 
 
             }
@@ -212,7 +217,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * To be semantically or contextually correct, maybe change the name
      * and signature of this function to something like:
-     *
+     * <p>
      * private void showBackButton(boolean show)
      * Just a suggestion.
      */
@@ -221,18 +226,18 @@ public class MainActivity extends AppCompatActivity
         // To keep states of ActionBar and ActionBarDrawerToggle synchronized,
         // when you enable on one, you disable on the other.
         // And as you may notice, the order for this operation is disable first, then enable - VERY VERY IMPORTANT.
-        if(enable) {
+        if (enable) {
             // Remove hamburger
             toggle.setDrawerIndicatorEnabled(false);
             // Show back button
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            if(menu != null)
-                menu.setGroupVisible(R.id.main_menu_group,false);
+            if (menu != null)
+                menu.setGroupVisible(R.id.main_menu_group, false);
             // when DrawerToggle is disabled i.e. setDrawerIndicatorEnabled(false), navigation icon
             // clicks are disabled i.e. the UP button will not work.
             // We need to add a listener, as in below, so DrawerToggle will forward
             // click events to this listener.
-            if(!mToolBarNavigationListenerIsRegistered) {
+            if (!mToolBarNavigationListenerIsRegistered) {
                 toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -252,8 +257,8 @@ public class MainActivity extends AppCompatActivity
             // Remove the/any drawer toggle listener
             toggle.setToolbarNavigationClickListener(null);
             mToolBarNavigationListenerIsRegistered = false;
-            if(menu != null)
-                menu.setGroupVisible(R.id.main_menu_group,true);
+            if (menu != null)
+                menu.setGroupVisible(R.id.main_menu_group, true);
         }
 
         // So, one may think "Hmm why not simplify to:
@@ -353,23 +358,21 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * Method that replaces the current fragment
+     * <p>
+     * //* @param item          The new menu item selected
      *
-     //* @param item          The new menu item selected
      * @param fragmentClass The new fragment class
      */
-    private final void replaceFragment(@NonNull Class<? extends Fragment> fragmentClass)
-    {
+    private final void replaceFragment(@NonNull Class<? extends Fragment> fragmentClass) {
         // Hide the in-app layout if it's visible
         //hideNotificationOverlay();
 
         //updateSelection(item);
 
-        try
-        {
+        try {
             final Fragment fragment = fragmentClass.newInstance();
 
-            if (getSupportActionBar() != null)
-            {
+            if (getSupportActionBar() != null) {
                 enableViews(fragment instanceof QuestionPage == true);
             }
 
@@ -378,23 +381,21 @@ public class MainActivity extends AppCompatActivity
             final FragmentManager fragmentManager = getSupportFragmentManager();
             final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
 
-            if (fragmentPopped == false)
-            {
+            if (fragmentPopped == false) {
                 //fragment not in back stack, create it.
                 final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.mainFrame, fragment);
                 fragmentTransaction.addToBackStack(backStateName);
                 fragmentTransaction.commit();
             }
-        }
-        catch (Exception exception)
-        {
+        } catch (Exception exception) {
             Log.e(MainActivity.TAG, "Unable to instantiate the fragment with class '" + fragmentClass.getSimpleName() + "'");
         }
     }
 
     @Override
     public void onListFragmentInteraction(Question item) {
+        CurrentApp.CURRENT_QUESTION_POSITION_ID = DataAccess.QUESTION_ARRAY_LIST.indexOf(item);
         replaceFragment(QuestionPage.class);
     }
 
