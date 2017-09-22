@@ -20,11 +20,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import static android.R.id.toggle;
 import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -77,26 +82,68 @@ public class QuestionPage extends Fragment
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Question currentQuestion =  DataAccess.QUESTION_ARRAY_LIST.get(CurrentApp.CURRENT_QUESTION_POSITION_ID);
 
         FragmentQuestionPageBinding fragmentQuestionPageBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_question_page,container,false);
-        fragmentQuestionPageBinding.setQuestion(DataAccess.QUESTION_ARRAY_LIST.get(CurrentApp.CURRENT_QUESTION_POSITION_ID));
+        fragmentQuestionPageBinding.setQuestion(currentQuestion);
+
+        ArrayList<QuestionAnswer> answerArrayList = new ArrayList<QuestionAnswer>();
+        for (QuestionAnswer questionAnswer:DataAccess.QUESTION_ANSWER_ARRAY_LIST)
+        {
+            if(questionAnswer.getQuestionId() == currentQuestion.getId())
+                answerArrayList.add(questionAnswer);
+        }
+
+        if(answerArrayList.size() == 0)
+        {
+            QuestionAnswer questionAnswer0 = new QuestionAnswer(currentQuestion.getId(),"0",currentQuestion.getCorrectAnswer(),false);
+            QuestionAnswer questionAnswer1 = new QuestionAnswer(currentQuestion.getId(),"1",currentQuestion.getWrongAnswer1(),false);
+            QuestionAnswer questionAnswer2 = new QuestionAnswer(currentQuestion.getId(),"2",currentQuestion.getWrongAnswer2(),false);
+            QuestionAnswer questionAnswer3 = new QuestionAnswer(currentQuestion.getId(),"3",currentQuestion.getWrongAnswer3(),false);
+
+            answerArrayList.add(questionAnswer0);
+            answerArrayList.add(questionAnswer1);
+            answerArrayList.add(questionAnswer2);
+            answerArrayList.add(questionAnswer3);
+
+            int listCount = answerArrayList.size();
+            Random rnd = new Random();
+            while (listCount > 1)
+            {
+                listCount--;
+                int k = rnd.nextInt(listCount + 1);
+                QuestionAnswer Tmp = answerArrayList.get(k);
+                answerArrayList.set(k,answerArrayList.get(listCount));
+                answerArrayList.set(listCount,Tmp);
+            }
+            
+            DataAccess.QUESTION_ANSWER_ARRAY_LIST.addAll(answerArrayList);
+        }
 
         RadioGroup rg = (RadioGroup) fragmentQuestionPageBinding.getRoot().findViewById(R.id.rdoGroupAnswer);
-        rg.setOnCheckedChangeListener(this);
-        RadioButton radioButton = new RadioButton(getContext());
-        radioButton.setText("@{question.QuestionText}");
-        //radioButton.setId(1234);//set radiobutton id and store it somewhere
         RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.WRAP_CONTENT, RadioGroup.LayoutParams.WRAP_CONTENT);
-        rg.addView(radioButton, params);
+        //RadioGroup.LayoutParams paramsLayout = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.MATCH_PARENT);
+
+        rg.setOnCheckedChangeListener(this);
+        for (QuestionAnswer questionAnswer: answerArrayList) {
+            RadioButton radioButton = new RadioButton(getContext());
+            radioButton.setText(questionAnswer.getAnswer() + "     " + (questionAnswer.getAnswerType() == "0"? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK) );
+            //radioButton.setId(1234);//set radiobutton id and store it somewhere
+//            LinearLayout linearLayout = new LinearLayout(getContext());
+//            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            //rg.addView(linearLayout,paramsLayout);
+            rg.addView(radioButton, params);
+
+//            TextView textView = new TextView(getContext());
+//            textView.setText("X");
+//            rg.addView(textView,params);
+        }
 
         // Inflate the layout for this fragment
         //View view = inflater.inflate(R.layout.fragment_question_page, container, false);

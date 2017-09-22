@@ -15,4 +15,5 @@ public class DataAccess {
      */
     public static final ArrayList<Question> QUESTION_ARRAY_LIST = new ArrayList<Question>();
 
+    public static final ArrayList<QuestionAnswer> QUESTION_ANSWER_ARRAY_LIST = new ArrayList<QuestionAnswer>();
 }

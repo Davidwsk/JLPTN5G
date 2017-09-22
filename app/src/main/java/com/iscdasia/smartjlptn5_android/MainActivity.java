@@ -481,11 +481,14 @@ public class MainActivity extends AppCompatActivity
                             int canBeSelectedCount = results.size();
                             while (count < noOfQuestions && count < canBeSelectedCount) {
                                 int iRnd = rnd.nextInt(canBeSelectedCount);
-                                Question xx = results.get(iRnd);
+                                Question question = results.get(iRnd);
                                 //if (result.Contains(xx))
-                                if (DataAccess.QUESTION_ARRAY_LIST.contains(xx))
+                                if (DataAccess.QUESTION_ARRAY_LIST.contains(question))
                                     continue;
-                                DataAccess.QUESTION_ARRAY_LIST.add(xx);
+                                DataAccess.QUESTION_ARRAY_LIST.add(question);
+
+
+
                                 count++;
                             }
 
