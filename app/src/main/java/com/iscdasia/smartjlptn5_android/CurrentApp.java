@@ -13,5 +13,8 @@ public class CurrentApp {
     public static int NO_OF_QUESTION = 10;
 
     public static final String CHECK_MARK= String.valueOf((char)0x2714);
+
     public static final String CROSS_MARK = String.valueOf((char)0x274C);
+
+    public static Boolean IsFinished = false;
 }

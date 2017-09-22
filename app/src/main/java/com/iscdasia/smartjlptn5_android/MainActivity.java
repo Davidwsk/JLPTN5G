@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebViewFragment;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -202,10 +204,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager().popBackStackImmediate();
                 currentFragment = getSupportFragmentManager().findFragmentById(R.id.mainFrame);
                 refreshSelectedMenuItem(currentFragment);
-                toggle.setDrawerIndicatorEnabled(true);
-                ;
-
-
+                //toggle.setDrawerIndicatorEnabled(true);
             }
             //super.onBackPressed();
         }
@@ -390,6 +389,36 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private final void replaceFragment2(@NonNull Class<? extends Fragment> fragmentClass) {
+        // Hide the in-app layout if it's visible
+        //hideNotificationOverlay();
+
+        //updateSelection(item);
+
+        try {
+            final Fragment fragment = fragmentClass.newInstance();
+
+            if (getSupportActionBar() != null) {
+                enableViews(fragment instanceof QuestionPage == true);
+            }
+
+            final String backStateName = fragment.getClass().getName();
+
+            final FragmentManager fragmentManager = getSupportFragmentManager();
+            final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
+
+            if (fragmentPopped == false) {
+                //fragment not in back stack, create it.
+                final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.mainFrame, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        } catch (Exception exception) {
+            Log.e(MainActivity.TAG, "Unable to instantiate the fragment with class '" + fragmentClass.getSimpleName() + "'");
+        }
+    }
+
     @Override
     public void onListFragmentInteraction(Question item) {
         CurrentApp.CURRENT_QUESTION_POSITION_ID = DataAccess.QUESTION_ARRAY_LIST.indexOf(item);
@@ -399,7 +428,38 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(String title) {
         // NOTE:  Code to replace the toolbar title based current visible fragment
-        getSupportActionBar().setTitle(title);
+        if(title == "RefreshQuestionPage")
+        {
+            replaceFragment2(QuestionPage.class);
+////            Fragment fragment = new QuestionPage();
+////            final FragmentManager fragmentManager = getSupportFragmentManager();
+////            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+////            fragmentTransaction.replace(R.id.mainFrame, fragment);
+////            fragmentTransaction.commit();
+//            final Fragment fragment = new QuestionPage();
+//
+//            if (getSupportActionBar() != null) {
+//                enableViews(fragment instanceof QuestionPage == true);
+//            }
+//
+//            //final String backStateName = fragment.getClass().getName();
+//
+//            final FragmentManager fragmentManager = getSupportFragmentManager();
+////            final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
+////
+////            if (fragmentPopped == false) {
+//                //fragment not in back stack, create it.
+//                final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.mainFrame, fragment);
+//                fragmentTransaction.commit();
+//            //}
+        }
+        else
+        {
+            getSupportActionBar().setTitle(title);
+        }
+
+
     }
 
     /**
@@ -475,6 +535,9 @@ public class MainActivity extends AppCompatActivity
                         public void run() {
                             //mAdapter.clear();
                             DataAccess.QUESTION_ARRAY_LIST.clear();
+                            DataAccess.QUESTION_ANSWER_ARRAY_LIST.clear();
+                            CurrentApp.IsFinished = false;
+                            CurrentApp.CURRENT_QUESTION_POSITION_ID = 0;
                             Random rnd = new Random();
                             int count = 0;
 
