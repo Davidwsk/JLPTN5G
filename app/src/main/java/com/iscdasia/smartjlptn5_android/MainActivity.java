@@ -431,28 +431,9 @@ public class MainActivity extends AppCompatActivity
         if(title == "RefreshQuestionPage")
         {
             replaceFragment2(QuestionPage.class);
-////            Fragment fragment = new QuestionPage();
-////            final FragmentManager fragmentManager = getSupportFragmentManager();
-////            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-////            fragmentTransaction.replace(R.id.mainFrame, fragment);
-////            fragmentTransaction.commit();
-//            final Fragment fragment = new QuestionPage();
-//
-//            if (getSupportActionBar() != null) {
-//                enableViews(fragment instanceof QuestionPage == true);
-//            }
-//
-//            //final String backStateName = fragment.getClass().getName();
-//
-//            final FragmentManager fragmentManager = getSupportFragmentManager();
-////            final boolean fragmentPopped = fragmentManager.popBackStackImmediate(backStateName, 0);
-////
-////            if (fragmentPopped == false) {
-//                //fragment not in back stack, create it.
-//                final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.mainFrame, fragment);
-//                fragmentTransaction.commit();
-//            //}
+        }
+        else if( title == "ShowQuestionListPage") {
+            replaceFragment(QuestionListFragment.class);
         }
         else
         {

@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -33,6 +34,8 @@ import android.widget.Toast;
 import static android.R.id.toggle;
 
 import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
+
+import org.w3c.dom.Text;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
@@ -104,25 +107,56 @@ public class QuestionPage extends Fragment
         final FragmentQuestionPageBinding fragmentQuestionPageBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_question_page, container, false);
         fragmentQuestionPageBinding.setQuestion(currentQuestion);
 
+        Button finishButton = (Button) fragmentQuestionPageBinding.getRoot().findViewById(R.id.btnFinish);
         ImageButton prevImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnPrevious);
-        prevImageButton.setOnClickListener(new View.OnClickListener(){
-            public  void onClick(View v){
-                if(CurrentApp.CURRENT_QUESTION_POSITION_ID > 0) {
+        ImageButton nextImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnNext);
+        TextView descriptionTextView = fragmentQuestionPageBinding.getRoot().findViewById(R.id.tvDescription);
+
+        finishButton.setVisibility(View.INVISIBLE);
+        prevImageButton.setVisibility(View.INVISIBLE);
+        nextImageButton.setVisibility(View.INVISIBLE);
+        descriptionTextView.setVisibility(View.INVISIBLE);
+
+        if (CurrentApp.CURRENT_QUESTION_POSITION_ID == 0 && CurrentApp.NO_OF_QUESTION > 1) {
+            nextImageButton.setVisibility(View.VISIBLE);
+
+        } else if (CurrentApp.CURRENT_QUESTION_POSITION_ID == CurrentApp.NO_OF_QUESTION - 1) {
+            prevImageButton.setVisibility(View.VISIBLE);
+            finishButton.setVisibility(View.VISIBLE);
+        } else {
+            prevImageButton.setVisibility(View.VISIBLE);
+            nextImageButton.setVisibility(View.VISIBLE);
+        }
+
+        prevImageButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (CurrentApp.CURRENT_QUESTION_POSITION_ID > 0) {
                     CurrentApp.CURRENT_QUESTION_POSITION_ID = CurrentApp.CURRENT_QUESTION_POSITION_ID - 1;
                     mListener.onFragmentInteraction("RefreshQuestionPage");
                 }
             }
         });
 
-        ImageButton nextImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnNext);
-        nextImageButton.setOnClickListener(new View.OnClickListener(){
-            public  void onClick(View v){
-                if(CurrentApp.CURRENT_QUESTION_POSITION_ID < CurrentApp.NO_OF_QUESTION) {
+
+        nextImageButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (CurrentApp.CURRENT_QUESTION_POSITION_ID < CurrentApp.NO_OF_QUESTION) {
                     CurrentApp.CURRENT_QUESTION_POSITION_ID = CurrentApp.CURRENT_QUESTION_POSITION_ID + 1;
                     mListener.onFragmentInteraction("RefreshQuestionPage");
                 }
             }
         });
+
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                CurrentApp.IsFinished = true;
+                mListener.onFragmentInteraction("ShowQuestionListPage");
+            }
+        });
+
+        if (CurrentApp.IsFinished) {
+            descriptionTextView.setVisibility(View.VISIBLE);
+        }
 
         answerArrayList = new ArrayList<QuestionAnswer>();
         for (QuestionAnswer questionAnswer : DataAccess.QUESTION_ANSWER_ARRAY_LIST) {
@@ -161,7 +195,8 @@ public class QuestionPage extends Fragment
         rg.setOnCheckedChangeListener(this);
         for (QuestionAnswer questionAnswer : answerArrayList) {
             RadioButton radioButton = new RadioButton(getContext());
-            radioButton.setId(Integer.parseInt(questionAnswer.getAnswerType()));
+            //radioButton.setId(Integer.parseInt(questionAnswer.getAnswerType()));
+            radioButton.setId(Integer.parseInt(DataAccess.QUESTION_ANSWER_ARRAY_LIST.indexOf(questionAnswer) + "" + Integer.parseInt(questionAnswer.getAnswerType())));
             radioButton.setChecked(questionAnswer.getSelected());
             //radioButton.setId(DataAccess.QUESTION_ANSWER_ARRAY_LIST.indexOf(questionAnswer));
             if (CurrentApp.IsFinished) {
@@ -218,13 +253,16 @@ public class QuestionPage extends Fragment
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        String checkValue = ("" + checkedId).substring(("" + checkedId).length()-1);
+
         for (QuestionAnswer questionAnswer :
                 answerArrayList) {
-            if (questionAnswer.getAnswerType().equals("" + checkedId)) {
+            if (questionAnswer.getAnswerType().equals(checkValue)) {
                 questionAnswer.setSelected(true);
             } else {
                 questionAnswer.setSelected(false);
             }
+
         }
     }
 
