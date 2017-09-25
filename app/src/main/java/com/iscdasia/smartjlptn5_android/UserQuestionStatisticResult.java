@@ -1,4 +1,4 @@
-package com.iscdasia.smartjlptn5_android.dummy;
+package com.iscdasia.smartjlptn5_android;
 
 /**
  * Created by iscd-dev01 on 25/9/2017.

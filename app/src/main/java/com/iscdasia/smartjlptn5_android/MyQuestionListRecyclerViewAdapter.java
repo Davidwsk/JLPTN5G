@@ -7,9 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.iscdasia.smartjlptn5_android.QuestionListFragment.OnListFragmentInteractionListener;
-import com.microsoft.windowsazure.mobileservices.http.ServiceFilterRequestImpl;
 
-import java.net.Authenticator;
 import java.util.List;
 
 /**
@@ -38,7 +36,13 @@ public class MyQuestionListRecyclerViewAdapter extends RecyclerView.Adapter<MyQu
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mContentView.setText(mValues.get(position).getQuestionText());
-
+        if(DataAccess.USER_QUESTION_STATISTIC_RESULT_ARRAY_LIST.size() > position) {
+            UserQuestionStatisticResult userQuestionStatisticResult = DataAccess.USER_QUESTION_STATISTIC_RESULT_ARRAY_LIST.get(position);
+            if (userQuestionStatisticResult != null) {
+                holder.mUQStatisticView.setText(userQuestionStatisticResult.getAllResult());
+                holder.mCurrentResult.setText(userQuestionStatisticResult.getCurrentResult());
+            }
+        }
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,12 +63,24 @@ public class MyQuestionListRecyclerViewAdapter extends RecyclerView.Adapter<MyQu
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mContentView;
+        public final TextView mUQStatisticView;
+        public final TextView mCurrentResult;
         public Question mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             mContentView = (TextView) view.findViewById(R.id.content);
+            mUQStatisticView = (TextView) view.findViewById(R.id.userQuestionStatistic);
+            mCurrentResult = (TextView) view.findViewById(R.id.currentResult);
+            if(CurrentApp.IsFinished) {
+                mCurrentResult.setVisibility(View.VISIBLE);
+                mUQStatisticView.setVisibility(View.VISIBLE);
+            }
+            else {
+                mCurrentResult.setVisibility(View.GONE);
+                mUQStatisticView.setVisibility(View.GONE);
+            }
         }
 
         @Override

@@ -20,6 +20,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,7 @@ import com.microsoft.windowsazure.mobileservices.table.sync.synchandler.SimpleSy
 import com.squareup.okhttp.OkHttpClient;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         implements
         QuestionListFragment.OnListFragmentInteractionListener,
         QuestionPage.OnFragmentInteractionListener,
+        QuestionPage.OnFragmentUpdateUserQuestionStatistic,
         NavigationView.OnNavigationItemSelectedListener {
 
     /**
@@ -85,6 +88,8 @@ public class MainActivity extends AppCompatActivity
      * Mobile Service Table used to access and Sync data
      */
     private MobileServiceSyncTable<Question> mLocalQuestionTable;
+
+    private MobileServiceSyncTable<UserQuestionStatistic> mLocalUserQuestionStatisticTable;
 
     /**
      * Adapter to sync the items list with the view
@@ -145,6 +150,7 @@ public class MainActivity extends AppCompatActivity
 
             // Offline Sync
             mLocalQuestionTable = mClient.getSyncTable(Question.class);
+            mLocalUserQuestionStatisticTable = mClient.getSyncTable(UserQuestionStatistic.class);
 
             //Init local storage
             initLocalStore().get();
@@ -428,20 +434,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(String title) {
         // NOTE:  Code to replace the toolbar title based current visible fragment
-        if(title == "RefreshQuestionPage")
-        {
+        if (title == "RefreshQuestionPage") {
             replaceFragment2(QuestionPage.class);
-        }
-        else if( title == "ShowQuestionListPage") {
+        } else if (title == "ShowQuestionListPage") {
             replaceFragment(QuestionListFragment.class);
-        }
-        else
-        {
+        } else {
             getSupportActionBar().setTitle(title);
         }
 
 
     }
+
 
     /**
      * Initialize local storage
@@ -477,6 +480,34 @@ public class MainActivity extends AppCompatActivity
                     tableDefinition.put("description", ColumnDataType.String);
 
                     localStore.defineTable("Question", tableDefinition);
+
+                    Map<String, ColumnDataType> uQStatisticDefinition = new HashMap<String, ColumnDataType>();
+                    uQStatisticDefinition.put("id", ColumnDataType.String);
+                    uQStatisticDefinition.put("UserId", ColumnDataType.String);
+                    uQStatisticDefinition.put("QuestionId", ColumnDataType.String);
+                    uQStatisticDefinition.put("lastUpdate", ColumnDataType.DateTimeOffset);
+                    uQStatisticDefinition.put("Round1Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round1Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round2Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round2Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round3Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round3Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round4Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round4Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round5Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round5Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round6Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round6Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round7Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round7Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round8Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round8Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round9Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round9Answer", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round10Result", ColumnDataType.String);
+                    uQStatisticDefinition.put("Round10Answer", ColumnDataType.String);
+
+                    localStore.defineTable("UserQuestionStatistic", uQStatisticDefinition);
 
                     SimpleSyncHandler handler = new SimpleSyncHandler();
 
@@ -517,6 +548,7 @@ public class MainActivity extends AppCompatActivity
                             //mAdapter.clear();
                             DataAccess.QUESTION_ARRAY_LIST.clear();
                             DataAccess.QUESTION_ANSWER_ARRAY_LIST.clear();
+                            DataAccess.USER_QUESTION_STATISTIC_RESULT_ARRAY_LIST.clear();
                             CurrentApp.IsFinished = false;
                             CurrentApp.CURRENT_QUESTION_POSITION_ID = 0;
                             Random rnd = new Random();
@@ -530,7 +562,6 @@ public class MainActivity extends AppCompatActivity
                                 if (DataAccess.QUESTION_ARRAY_LIST.contains(question))
                                     continue;
                                 DataAccess.QUESTION_ARRAY_LIST.add(question);
-
 
 
                                 count++;
@@ -578,6 +609,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private List<Question> refreshItemsFromLocalMobileServiceTable(String questionGroupId) throws ExecutionException, InterruptedException {
+
 
         List<Question> localQuestionList = mLocalQuestionTable.read(null).get();
         if (localQuestionList.size() == 0) {
@@ -690,6 +722,163 @@ public class MainActivity extends AppCompatActivity
         builder.setMessage(message);
         builder.setTitle(title);
         builder.create().show();
+    }
+
+    @Override
+    public String onFragmentUpdateUserQuestionStatistic(String userId, String questionId, String result, String selectedValue) {
+        String returnResult = "";
+        try {
+            UserQuestionStatistic currentUserQuestionStatistic = null;
+
+            List<UserQuestionStatistic> userQuestionStatisticsList = mLocalUserQuestionStatisticTable.read(null).get();
+            for (UserQuestionStatistic userQuestionStatistic :
+                    userQuestionStatisticsList) {
+                if (userQuestionStatistic.getQuestionId().equals(questionId)) {
+                    currentUserQuestionStatistic = userQuestionStatistic;
+                    break;
+                }
+            }
+
+            String resultValue = "" + (result == CurrentApp.CHECK_MARK ? 1 : -1);
+            String answer = selectedValue;
+
+            if (currentUserQuestionStatistic == null) {
+                currentUserQuestionStatistic = new UserQuestionStatistic(userId, questionId);
+                currentUserQuestionStatistic.setRound1Answer(answer);
+                currentUserQuestionStatistic.setRound1Result(resultValue);
+                mLocalUserQuestionStatisticTable.insert(currentUserQuestionStatistic);
+                returnResult = result;
+                return returnResult;
+            } else {
+                returnResult = currentUserQuestionStatistic.getRound1Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound2Result())) {
+                currentUserQuestionStatistic.setRound2Answer(answer);
+                currentUserQuestionStatistic.setRound2Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound2Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound3Result())) {
+                currentUserQuestionStatistic.setRound3Answer(answer);
+                currentUserQuestionStatistic.setRound3Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound3Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound3Result())) {
+                currentUserQuestionStatistic.setRound3Answer(answer);
+                currentUserQuestionStatistic.setRound3Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound3Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound4Result())) {
+                currentUserQuestionStatistic.setRound4Answer(answer);
+                currentUserQuestionStatistic.setRound4Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound4Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound5Result())) {
+                currentUserQuestionStatistic.setRound5Answer(answer);
+                currentUserQuestionStatistic.setRound5Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound5Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound6Result())) {
+                currentUserQuestionStatistic.setRound6Answer(answer);
+                currentUserQuestionStatistic.setRound6Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound6Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound7Result())) {
+                currentUserQuestionStatistic.setRound7Answer(answer);
+                currentUserQuestionStatistic.setRound7Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound7Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound8Result())) {
+                currentUserQuestionStatistic.setRound8Answer(answer);
+                currentUserQuestionStatistic.setRound8Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound8Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound9Result())) {
+                currentUserQuestionStatistic.setRound9Answer(answer);
+                currentUserQuestionStatistic.setRound9Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound9Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+
+            if (TextUtils.isEmpty(currentUserQuestionStatistic.getRound10Result())) {
+                currentUserQuestionStatistic.setRound10Answer(answer);
+                currentUserQuestionStatistic.setRound10Result(resultValue);
+                mLocalUserQuestionStatisticTable.update(currentUserQuestionStatistic);
+
+                returnResult += " ";
+                returnResult += result;
+                return returnResult;
+            } else {
+                returnResult += currentUserQuestionStatistic.getRound10Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
+            }
+            
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return returnResult;
     }
 
     private class ProgressFilter implements ServiceFilter {

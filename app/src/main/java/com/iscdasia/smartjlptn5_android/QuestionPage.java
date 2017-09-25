@@ -1,43 +1,20 @@
 package com.iscdasia.smartjlptn5_android;
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatRadioButton;
-import android.support.v7.widget.Toolbar;
-import android.transition.TransitionManager;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import static android.R.id.toggle;
 
 import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
 
-import org.w3c.dom.Text;
-
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -62,6 +39,8 @@ public class QuestionPage extends Fragment
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private OnFragmentUpdateUserQuestionStatistic mUpdateUQSListener;
 
     private Question currentQuestion;
 
@@ -150,6 +129,30 @@ public class QuestionPage extends Fragment
         finishButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 CurrentApp.IsFinished = true;
+
+                DataAccess.USER_QUESTION_STATISTIC_RESULT_ARRAY_LIST.clear();
+                for (Question question :
+                        DataAccess.QUESTION_ARRAY_LIST) {
+                    String selectedValue = "";
+                    String resultString = CurrentApp.CROSS_MARK;
+
+                    for (QuestionAnswer questionAnswer :
+                         DataAccess.QUESTION_ANSWER_ARRAY_LIST) {
+                        if( question.getId() == questionAnswer.getQuestionId()  ){
+                            if(questionAnswer.getSelected() == true) {
+                                selectedValue = questionAnswer.getAnswerType();
+                                if (questionAnswer.getAnswerType() == "0") {
+                                    resultString = CurrentApp.CHECK_MARK;
+                                }
+                            }
+                        }
+                    }
+
+                    String allUQStatistic = mUpdateUQSListener.onFragmentUpdateUserQuestionStatistic("MyUser",question.getId(),resultString,selectedValue);
+
+                    DataAccess.USER_QUESTION_STATISTIC_RESULT_ARRAY_LIST.add( new UserQuestionStatisticResult(resultString,allUQStatistic));
+                }
+
                 mListener.onFragmentInteraction("ShowQuestionListPage");
             }
         });
@@ -243,12 +246,20 @@ public class QuestionPage extends Fragment
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
+        if (context instanceof OnFragmentUpdateUserQuestionStatistic) {
+            mUpdateUQSListener = (OnFragmentUpdateUserQuestionStatistic) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        mUpdateUQSListener = null;
     }
 
     @Override
@@ -279,6 +290,10 @@ public class QuestionPage extends Fragment
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(String title);
+    }
+
+    public interface OnFragmentUpdateUserQuestionStatistic {
+        String onFragmentUpdateUserQuestionStatistic(String userId, String questionId, String result, String selectedValue);
     }
 
 
