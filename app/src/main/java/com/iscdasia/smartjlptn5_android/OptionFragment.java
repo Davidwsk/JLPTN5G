@@ -1,5 +1,6 @@
 package com.iscdasia.smartjlptn5_android;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 /**
@@ -119,10 +121,19 @@ public class OptionFragment extends Fragment implements Button.OnClickListener {
             case R.id.btnUpdateOption:
                 EditText etNoOfQuestion = (EditText) this.getView().findViewById(R.id.etNoOfQuestion);
                 mFragmentUpdateNoOfQuestionListener.onFragmentUpdateNoOfQuestion(Integer.parseInt(etNoOfQuestion.getText().toString()));
+                createAndShowDialog("Update complete successfully.","");
                 break;
             default:
                 break;
         }
+    }
+
+    private void createAndShowDialog(final String message, final String title) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.create().show();
     }
 
     /**

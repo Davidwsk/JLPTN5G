@@ -114,7 +114,6 @@ public class MainActivity extends AppCompatActivity
     private Menu menu;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -276,6 +275,12 @@ public class MainActivity extends AppCompatActivity
         // To re-iterate, the order in which you enable and disable views IS important #dontSimplify.
     }
 
+    private void enableMainMenuGroup(boolean enable) {
+        if (menu != null) {
+            menu.setGroupVisible(R.id.main_menu_group, enable);
+        }
+    }
+
     /**
      * Method that refreshes the selected menu item on back
      *
@@ -286,6 +291,7 @@ public class MainActivity extends AppCompatActivity
         if (currentFragment != null) {
             if (getSupportActionBar() != null) {
                 enableViews(currentFragment instanceof QuestionPage == true);
+                enableMainMenuGroup(currentFragment instanceof QuestionListFragment == true);
                 //getSupportActionBar().setDisplayHomeAsUpEnabled(currentFragment instanceof QuestionPage == true);
             }
         }
@@ -334,21 +340,16 @@ public class MainActivity extends AppCompatActivity
         //Fragment fragment = null;
         if (id == R.id.nav_question_list) {
             replaceFragment(QuestionListFragment.class);
-            //fragment = new QuestionListFragment();
         } else if (id == R.id.nav_option) {
             replaceFragment(OptionFragment.class);
             //fragment = new QuestionListFragment();
-        } else if (id == R.id.nav_camera) {
+        } else if (id == R.id.nav_exam_1) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_exam_2) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_exam_3) {
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_about) {
 
         }
 
@@ -384,6 +385,7 @@ public class MainActivity extends AppCompatActivity
 
             if (getSupportActionBar() != null) {
                 enableViews(fragment instanceof QuestionPage == true);
+                enableMainMenuGroup(fragment instanceof QuestionListFragment == true);
             }
 
             final String backStateName = fragment.getClass().getName();
@@ -414,6 +416,7 @@ public class MainActivity extends AppCompatActivity
 
             if (getSupportActionBar() != null) {
                 enableViews(fragment instanceof QuestionPage == true);
+                enableMainMenuGroup(fragment instanceof QuestionListFragment == true);
             }
 
             final String backStateName = fragment.getClass().getName();
@@ -603,7 +606,6 @@ public class MainActivity extends AppCompatActivity
                 super.onPostExecute(aVoid);
 
 
-
                 replaceFragment(QuestionListFragment.class);
 
 //                //NOTE:  Open fragment1 initially.
@@ -619,20 +621,19 @@ public class MainActivity extends AppCompatActivity
         runAsyncTask(task);
     }
 
-    private void setUserInformation(){
+    private void setUserInformation() {
 
         String android_id = "12345";
         try {
             android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                     Settings.Secure.ANDROID_ID);
-        }
-        catch (Exception ex){
+        } catch (Exception ex) {
         }
 
         try {
 
             ArrayList<UserInformation> userInformationArray = mLocalUserInformationTable.read(null).get();
-if(userInformationArray.size() == 0) {
+            if (userInformationArray.size() == 0) {
                 UserInformation newUserInformation = new UserInformation();
                 newUserInformation.setUserName(android_id);
                 newUserInformation.setPassword(android_id);
@@ -924,7 +925,7 @@ if(userInformationArray.size() == 0) {
             } else {
                 returnResult += currentUserQuestionStatistic.getRound10Result() == "1" ? CurrentApp.CHECK_MARK : CurrentApp.CROSS_MARK;
             }
-            
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
