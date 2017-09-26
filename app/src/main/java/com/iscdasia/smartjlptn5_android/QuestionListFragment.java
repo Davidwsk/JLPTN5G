@@ -10,10 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.iscdasia.smartjlptn5_android.dummy.DummyContent;
-import com.iscdasia.smartjlptn5_android.dummy.DummyContent.DummyItem;
-
-import java.util.List;
+import com.iscdasia.smartjlptn5_android.model.Question;
 
 /**
  * A fragment representing a list of Items.

@@ -14,6 +14,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
+import com.iscdasia.smartjlptn5_android.model.Question;
+import com.iscdasia.smartjlptn5_android.viewmodel.QuestionAnswer;
+import com.iscdasia.smartjlptn5_android.viewmodel.UserQuestionStatisticResult;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -151,7 +154,7 @@ public class QuestionPage extends Fragment
                         }
                     }
 
-                    String allUQStatistic = mUpdateUQSListener.onFragmentUpdateUserQuestionStatistic("MyUser",question.getId(),resultString,selectedValue);
+                    String allUQStatistic = mUpdateUQSListener.onFragmentUpdateUserQuestionStatistic(CurrentApp.CURRENT_USER_ID,question.getId(),resultString,selectedValue);
 
                     DataAccess.USER_QUESTION_STATISTIC_RESULT_ARRAY_LIST.add( new UserQuestionStatisticResult(resultString,allUQStatistic));
                 }

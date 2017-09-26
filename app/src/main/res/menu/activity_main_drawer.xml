@@ -6,6 +6,12 @@
             android:id="@+id/nav_question_list"
             android:icon="@drawable/ic_menu_camera"
             android:title="Import" />
+
+        <item
+            android:id="@+id/nav_option"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Import" />
+
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"

@@ -1,5 +1,9 @@
 package com.iscdasia.smartjlptn5_android;
 
+import com.iscdasia.smartjlptn5_android.model.Question;
+import com.iscdasia.smartjlptn5_android.viewmodel.QuestionAnswer;
+import com.iscdasia.smartjlptn5_android.viewmodel.UserQuestionStatisticResult;
+
 import java.util.ArrayList;
 
 /**

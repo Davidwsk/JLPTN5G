@@ -1,16 +1,12 @@
 package com.iscdasia.smartjlptn5_android;
 
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.databinding.DataBindingUtil;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -25,16 +21,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebViewFragment;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.SettableFuture;
+import com.iscdasia.smartjlptn5_android.model.Question;
+import com.iscdasia.smartjlptn5_android.model.UserInformation;
+import com.iscdasia.smartjlptn5_android.model.UserQuestionStatistic;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.http.NextServiceFilterCallback;
 import com.microsoft.windowsazure.mobileservices.http.OkHttpClientFactory;
@@ -69,6 +64,8 @@ public class MainActivity extends AppCompatActivity
         QuestionListFragment.OnListFragmentInteractionListener,
         QuestionPage.OnFragmentInteractionListener,
         QuestionPage.OnFragmentUpdateUserQuestionStatistic,
+        OptionFragment.OnFragmentInteractionListener,
+        OptionFragment.OnFragmentUpdateNoOfQuestionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     /**
@@ -90,6 +87,8 @@ public class MainActivity extends AppCompatActivity
     private MobileServiceSyncTable<Question> mLocalQuestionTable;
 
     private MobileServiceSyncTable<UserQuestionStatistic> mLocalUserQuestionStatisticTable;
+
+    private MobileServiceSyncTable<UserInformation> mLocalUserInformationTable;
 
     /**
      * Adapter to sync the items list with the view
@@ -113,6 +112,8 @@ public class MainActivity extends AppCompatActivity
     private boolean mToolBarNavigationListenerIsRegistered = false;
 
     private Menu menu;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +152,8 @@ public class MainActivity extends AppCompatActivity
             // Offline Sync
             mLocalQuestionTable = mClient.getSyncTable(Question.class);
             mLocalUserQuestionStatisticTable = mClient.getSyncTable(UserQuestionStatistic.class);
+            mLocalUserInformationTable = mClient.getSyncTable(UserInformation.class);
+
 
             //Init local storage
             initLocalStore().get();
@@ -159,6 +162,8 @@ public class MainActivity extends AppCompatActivity
             //mAdapter = new ToDoItemAdapter(this, R.layout.fragment_questionlist);
 //            ListView listViewToDo = (ListView) findViewById(R.id.listViewToDo);
 //            listViewToDo.setAdapter(mAdapter);
+
+            setUserInformation();
 
             // Load the items from the Mobile Service
             refreshItemsFromTable(CurrentApp.QUESTION_GROUP_ID, CurrentApp.NO_OF_QUESTION);
@@ -329,6 +334,9 @@ public class MainActivity extends AppCompatActivity
         //Fragment fragment = null;
         if (id == R.id.nav_question_list) {
             replaceFragment(QuestionListFragment.class);
+            //fragment = new QuestionListFragment();
+        } else if (id == R.id.nav_option) {
+            replaceFragment(OptionFragment.class);
             //fragment = new QuestionListFragment();
         } else if (id == R.id.nav_camera) {
             // Handle the camera action
@@ -509,6 +517,16 @@ public class MainActivity extends AppCompatActivity
 
                     localStore.defineTable("UserQuestionStatistic", uQStatisticDefinition);
 
+                    Map<String, ColumnDataType> userInformationDefinition = new HashMap<String, ColumnDataType>();
+                    userInformationDefinition.put("id", ColumnDataType.String);
+                    userInformationDefinition.put("UserName", ColumnDataType.String);
+                    userInformationDefinition.put("Password", ColumnDataType.String);
+                    userInformationDefinition.put("NoOfQuestion", ColumnDataType.String);
+                    userInformationDefinition.put("lastUpdate", ColumnDataType.DateTimeOffset);
+                    userInformationDefinition.put("IsPurchased_1", ColumnDataType.Boolean);
+
+                    localStore.defineTable("UserInformation", userInformationDefinition);
+
                     SimpleSyncHandler handler = new SimpleSyncHandler();
 
                     syncContext.initialize(localStore, handler).get();
@@ -584,6 +602,8 @@ public class MainActivity extends AppCompatActivity
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
+
+
                 replaceFragment(QuestionListFragment.class);
 
 //                //NOTE:  Open fragment1 initially.
@@ -597,6 +617,38 @@ public class MainActivity extends AppCompatActivity
         };
 
         runAsyncTask(task);
+    }
+
+    private void setUserInformation(){
+
+        String android_id = "12345";
+        try {
+            android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+        }
+        catch (Exception ex){
+        }
+
+        try {
+
+            ArrayList<UserInformation> userInformationArray = mLocalUserInformationTable.read(null).get();
+if(userInformationArray.size() == 0) {
+                UserInformation newUserInformation = new UserInformation();
+                newUserInformation.setUserName(android_id);
+                newUserInformation.setPassword(android_id);
+                mLocalUserInformationTable.insert(newUserInformation);
+                userInformationArray.add(newUserInformation);
+            }
+
+            CurrentApp.CURRENT_USER_ID = userInformationArray.get(0).getUserName();
+            CurrentApp.NO_OF_QUESTION = Integer.parseInt(userInformationArray.get(0).getNoOfQuestion());
+
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -879,6 +931,21 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
         return returnResult;
+    }
+
+    @Override
+    public void onFragmentUpdateNoOfQuestion(int noOfQuestion) {
+        try {
+            ArrayList<UserInformation> userInformationArrayList = mLocalUserInformationTable.read(null).get();
+            UserInformation userInformation = userInformationArrayList.get(0);
+            userInformation.setNoOfQuestion("" + noOfQuestion);
+            mLocalUserInformationTable.update(userInformation);
+            CurrentApp.NO_OF_QUESTION = noOfQuestion;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     private class ProgressFilter implements ServiceFilter {

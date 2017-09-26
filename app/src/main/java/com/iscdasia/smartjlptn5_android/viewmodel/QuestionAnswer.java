@@ -1,4 +1,4 @@
-package com.iscdasia.smartjlptn5_android;
+package com.iscdasia.smartjlptn5_android.viewmodel;
 
 /**
  * Created by iscd-dev01 on 22/9/2017.

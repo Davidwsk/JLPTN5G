@@ -1,6 +1,4 @@
-package com.iscdasia.smartjlptn5_android;
-
-import com.microsoft.windowsazure.mobileservices.table.DateTimeOffset;
+package com.iscdasia.smartjlptn5_android.model;
 
 /**
  * Created by iscd-dev01 on 14/9/2017.

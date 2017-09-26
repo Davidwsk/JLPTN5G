@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.iscdasia.smartjlptn5_android.QuestionListFragment.OnListFragmentInteractionListener;
+import com.iscdasia.smartjlptn5_android.model.Question;
+import com.iscdasia.smartjlptn5_android.viewmodel.UserQuestionStatisticResult;
 
 import java.util.List;
 

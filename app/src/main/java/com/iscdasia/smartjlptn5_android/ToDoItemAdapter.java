@@ -8,9 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 
-import com.iscdasia.smartjlptn5_android.R;
-
-import java.util.List;
+import com.iscdasia.smartjlptn5_android.model.Question;
 
 
 /**
