@@ -86,7 +86,7 @@ public class QuestionPage extends Fragment
         final FragmentQuestionPageBinding fragmentQuestionPageBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_question_page, container, false);
         fragmentQuestionPageBinding.setQuestion(currentQuestion);
 
-        Button finishButton = (Button) fragmentQuestionPageBinding.getRoot().findViewById(R.id.btnFinish);
+        final Button finishButton = (Button) fragmentQuestionPageBinding.getRoot().findViewById(R.id.btnFinish);
         ImageButton prevImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnPrevious);
         ImageButton nextImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnNext);
         TextView descriptionTextView = fragmentQuestionPageBinding.getRoot().findViewById(R.id.tvDescription);
@@ -102,6 +102,8 @@ public class QuestionPage extends Fragment
         } else if (CurrentApp.CURRENT_QUESTION_POSITION_ID == CurrentApp.NO_OF_QUESTION - 1) {
             prevImageButton.setVisibility(View.VISIBLE);
             finishButton.setVisibility(View.VISIBLE);
+            finishButton.setEnabled(!CurrentApp.IsFinished);
+
         } else {
             prevImageButton.setVisibility(View.VISIBLE);
             nextImageButton.setVisibility(View.VISIBLE);
@@ -128,6 +130,7 @@ public class QuestionPage extends Fragment
 
         finishButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                finishButton.setEnabled(false);
                 CurrentApp.IsFinished = true;
 
                 DataAccess.USER_QUESTION_STATISTIC_RESULT_ARRAY_LIST.clear();
