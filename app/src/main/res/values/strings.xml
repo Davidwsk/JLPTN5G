@@ -25,4 +25,55 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="header_title">SMART JLPT N5 Grammar</string>
+
+    <string name="bodytext3text"><![CDATA[To help serious Japanese learner to learn effectively, I created this <b>SMART JLPT N5</b> apps.]]></string>
+    <string name="smart_jlpt">SMART JLPT</string>
+    <string name="bodytext1">Learn by answering the question you have answered wrong</string>
+    <string name="bodytext2">When I was learning Japanese, I realized that I have 2 big issues:</string>
+    <string name="bodytext1bracket">1)</string>
+    <string name="bodytext2_2">I cannot remember what I have learnt.</string>
+    <string name="bodytext2bracket">2)</string>
+    <string name="bodytext3bracket">3)</string>
+    <string name="bodytext4bracket">4)</string>
+    <string name="bodytext2_4">I waste too much time on non-productive activates. i.e. Spend too much time looking for answer and explanation. Not able to study what I need to know.</string>
+    <string name="bodytext4">
+        <![CDATA[What it does:
+        <br/>We created a database of Japanese grammar exercise at JLPT N5 Level.
+        <br/>When you are free, just spend time answer 5 to 10 questions.
+        <br/>The app will remember which question you have answered wrong and it will ask you again until you can answer correctly for 3 times.
+        <br/>After you have answered the entire question database correctly for 3 times, you are ready for exam!
+]]>
+    </string>
+    <string name="bodytext5">Who is this app for?</string>
+    <string name="bodytext5_2">Know the basic of Japanese characters</string>
+    <string name="bodytext5_4">Preparing for JLPT N5 exam</string>
+    <string name="bodytext5_6">Suggest using this app 6 to 12 months before JLPT N5 Exam</string>
+    <string name="bodytext5_8">As a grammar refresher, to prepare for further Japanese study, i.e. N4</string>
+    <string name="bodytext6">This App contain of 4 sections.</string>
+    <string name="bodytext6_2">
+        <![CDATA[
+        Learn<br/>- cover all the grammar you need to learn for JLPT N5 exam
+        ]]>
+    </string>
+    <string name="bodytext6_4">
+        <!--<![CDATA[-->
+        <!--Exam section 1<br/><p>- passed and simulated question for JLPT N5 grammar section 1</p>-->
+        <!--]]>-->
+        <p>
+        Exam section 1<br /><p>- passed and simulated question for JLPT N5 grammar section 1</p>
+        </p>
+    </string>
+    <string name="bodytext6_6">
+        <![CDATA[
+        Exam section 2<br/>- passed and simulated question for JLPT N5 grammar section 2
+        ]]>
+    </string>
+    <string name="bodytext6_8">
+        <![CDATA[
+        Exam section 3<br/>- passed and simulated question for JLPT N5 grammar section 3
+        ]]>
+    </string>
+
+
 </resources>

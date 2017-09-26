@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity
         QuestionPage.OnFragmentUpdateUserQuestionStatistic,
         OptionFragment.OnFragmentInteractionListener,
         OptionFragment.OnFragmentUpdateNoOfQuestionListener,
+        AboutFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     /**
@@ -350,6 +351,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_exam_3) {
 
         } else if (id == R.id.nav_about) {
+            replaceFragment(AboutFragment.class);
 
         }
 
