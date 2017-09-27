@@ -666,6 +666,10 @@ public class MainActivity extends AppCompatActivity
 
             CurrentApp.CURRENT_USER_ID = userInformationArray.get(0).getUserName();
             CurrentApp.NO_OF_QUESTION = Integer.parseInt(userInformationArray.get(0).getNoOfQuestion());
+            if(userInformationArray.get(0).getPurchased_1())
+            {
+                mAdView.setVisibility(View.GONE);
+            }
 
 
         } catch (InterruptedException e) {

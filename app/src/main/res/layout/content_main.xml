@@ -1,27 +1,67 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.iscdasia.smartjlptn5_android.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:paddingTop="?attr/actionBarSize"
+    >
 
-    <!-- Note : This is the container Frame Layout for all the fragmetns-->
-    <FrameLayout
-        android:id="@+id/mainFrame"
+    <ScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/adView"
+        android:fillViewport="true"
+        >
+        <FrameLayout
+            android:id="@+id/mainFrame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+    </ScrollView>
+
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        ></FrameLayout>
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-5096742480218992/6860023993"
+        ></com.google.android.gms.ads.AdView>
 
     <ProgressBar
         android:id="@+id/loadingProgressBar"
-        android:layout_width="28dp"
-        android:layout_height="28dp" />
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
 
-</android.support.constraint.ConstraintLayout>
+    <!--<ScrollView-->
+    <!--android:id="@+id/scroll_view2"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_above="@+id/adView"-->
+    <!--android:fillViewport="true">-->
+
+    <!--&lt;!&ndash; Note : This is the container Frame Layout for all the fragmetns&ndash;&gt;-->
+    <!---->
+
+    <!---->
+
+    <!--</ScrollView>-->
+
+</RelativeLayout>
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>--><!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--xmlns:app="http://schemas.android.com/apk/res-auto"--><!--xmlns:tools="http://schemas.android.com/tools"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:layout_above="@id/adView"--><!--app:layout_behavior="@string/appbar_scrolling_view_behavior"--><!--tools:context="com.iscdasia.smartjlptn5_android.MainActivity"--><!--tools:showIn="@layout/app_bar_main">-->
+
+    <!--&lt;!&ndash; Note : This is the container Frame Layout for all the fragmetns&ndash;&gt;--><!--<FrameLayout--><!--android:id="@+id/mainFrame"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--&gt;</FrameLayout>-->
+
+    <!--<ProgressBar--><!--android:id="@+id/loadingProgressBar"--><!--android:layout_width="28dp"--><!--android:layout_height="28dp" />-->
+
+    <!--</android.support.constraint.ConstraintLayout>-->
+
 
 
 
