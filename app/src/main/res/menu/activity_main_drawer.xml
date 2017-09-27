@@ -13,11 +13,11 @@
         <item
             android:id="@+id/nav_exam_2"
             android:icon="@drawable/ic_import_contacts"
-            android:title="Exam section 1" />
+            android:title="Exam section 2" />
         <item
             android:id="@+id/nav_exam_3"
             android:icon="@drawable/ic_import_contacts"
-            android:title="Exam section 1" />
+            android:title="Exam section 3" />
 
     </group >
 

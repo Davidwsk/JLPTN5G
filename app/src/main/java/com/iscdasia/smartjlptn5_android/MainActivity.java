@@ -1,6 +1,7 @@
 package com.iscdasia.smartjlptn5_android;
 
 import android.app.AlertDialog;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         OptionFragment.OnFragmentInteractionListener,
         OptionFragment.OnFragmentUpdateNoOfQuestionListener,
         AboutFragment.OnFragmentInteractionListener,
+        FeatureSoonFragment.OnFragmentInteractionListener,
         NavigationView.OnNavigationItemSelectedListener {
 
     /**
@@ -345,11 +347,14 @@ public class MainActivity extends AppCompatActivity
             replaceFragment(OptionFragment.class);
             //fragment = new QuestionListFragment();
         } else if (id == R.id.nav_exam_1) {
-            // Handle the camera action
+            replaceFragment(FeatureSoonFragment.class);
+            setActionBarTitle("Exam section 1");
         } else if (id == R.id.nav_exam_2) {
-
+            replaceFragment(FeatureSoonFragment.class);
+            setActionBarTitle("Exam section 2");
         } else if (id == R.id.nav_exam_3) {
-
+            replaceFragment(FeatureSoonFragment.class);
+            setActionBarTitle("Exam section 3");
         } else if (id == R.id.nav_about) {
             replaceFragment(AboutFragment.class);
 
@@ -367,6 +372,10 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
     /**

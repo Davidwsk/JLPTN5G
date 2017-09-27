@@ -45,8 +45,8 @@
         </RelativeLayout>
         <ScrollView
             android:id="@+id/scroll_view"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_above="@+id/footer"
             android:layout_below="@+id/header"
             android:fillViewport="true">
@@ -62,7 +62,7 @@
                     android:id="@+id/bodytext"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:text="@string/smart_jlpt"
                     android:textColor="@android:color/black"
                     android:textSize="16sp"
@@ -73,7 +73,7 @@
                     android:id="@+id/bodytext1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:text="@string/bodytext1"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
@@ -83,32 +83,37 @@
                     android:id="@+id/bodytext2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:text="@string/bodytext2"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:layout_margin="5sp"/>
 
                 <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TableRow>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:gravity="start"
+                    android:shrinkColumns="1">
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
                         <TextView
                             android:id="@+id/bodytext2_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext1bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:layout_margin="5sp"/>
+                            android:layout_margin="5sp"
+                            />
                         <TextView
                             android:id="@+id/bodytext2_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext2_2"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -121,7 +126,7 @@
                             android:id="@+id/bodytext2_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext2bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -131,12 +136,13 @@
                             android:id="@+id/bodytext2_4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext2_4"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:layout_margin="5sp"/>
+                            android:layout_margin="5sp"
+                            />
                     </TableRow>
                 </TableLayout>
 
@@ -154,7 +160,7 @@
                     android:id="@+id/bodytext4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:text="@string/bodytext4"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
@@ -164,22 +170,26 @@
                     android:id="@+id/bodytext5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:text="@string/bodytext5"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:layout_margin="5sp"/>
 
                 <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TableRow>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:gravity="start"
+                    android:shrinkColumns="1">
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
                         <TextView
                             android:id="@+id/bodytext5_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext1bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -189,7 +199,7 @@
                             android:id="@+id/bodytext5_2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext5_2"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -202,7 +212,7 @@
                             android:id="@+id/bodytext5_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext2bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -212,7 +222,7 @@
                             android:id="@+id/bodytext5_4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext5_4"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -224,7 +234,7 @@
                             android:id="@+id/bodytext5_5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext3bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -234,7 +244,7 @@
                             android:id="@+id/bodytext5_6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext5_6"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -246,7 +256,7 @@
                             android:id="@+id/bodytext5_7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext4bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -256,7 +266,7 @@
                             android:id="@+id/bodytext5_8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext5_8"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -269,32 +279,38 @@
                     android:id="@+id/bodytext6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="left"
+                    android:gravity="start"
                     android:text="@string/bodytext6"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:layout_margin="5sp"/>
 
                 <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TableRow>
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    android:gravity="fill_horizontal"
+                    android:shrinkColumns="1"
+                    >
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        >
                         <TextView
                             android:id="@+id/bodytext6_1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext1bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_margin="5sp"/>
-                        <com.iscdasia.smartjlptn5_android.HTMLTextView
+                        <TextView
                             android:id="@+id/bodytext6_2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext6_2"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -307,17 +323,17 @@
                             android:id="@+id/bodytext6_3"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext2bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_margin="5sp"/>
-                        <com.iscdasia.smartjlptn5_android.HTMLTextView
+                        <TextView
                             android:id="@+id/bodytext6_4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext6_4"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -329,17 +345,17 @@
                             android:id="@+id/bodytext6_5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext3bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_margin="5sp"/>
-                        <com.iscdasia.smartjlptn5_android.HTMLTextView
+                        <TextView
                             android:id="@+id/bodytext6_6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext6_6"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -351,17 +367,17 @@
                             android:id="@+id/bodytext6_7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="start"
                             android:text="@string/bodytext4bracket"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             android:layout_margin="5sp"/>
-                        <com.iscdasia.smartjlptn5_android.HTMLTextView
+                        <TextView
                             android:id="@+id/bodytext6_8"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:gravity="left"
+                            android:gravity="fill_horizontal"
                             android:text="@string/bodytext6_8"
                             android:textColor="@android:color/black"
                             android:textSize="14sp"
@@ -369,6 +385,7 @@
                             android:layout_margin="5sp"/>
                     </TableRow>
                 </TableLayout>
+
 
             </LinearLayout>
         </ScrollView>

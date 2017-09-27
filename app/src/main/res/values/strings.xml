@@ -52,28 +52,16 @@
     <string name="bodytext5_8">As a grammar refresher, to prepare for further Japanese study, i.e. N4</string>
     <string name="bodytext6">This App contain of 4 sections.</string>
     <string name="bodytext6_2">
-        <![CDATA[
-        Learn<br/>- cover all the grammar you need to learn for JLPT N5 exam
-        ]]>
+        Learn\n- cover all the grammar you need to learn for JLPT N5 exam
     </string>
     <string name="bodytext6_4">
-        <!--<![CDATA[-->
-        <!--Exam section 1<br/><p>- passed and simulated question for JLPT N5 grammar section 1</p>-->
-        <!--]]>-->
-        <p>
-        Exam section 1<br /><p>- passed and simulated question for JLPT N5 grammar section 1</p>
-        </p>
+        Exam section 1\n- passed and simulated question for JLPT N5 grammar section 1
     </string>
     <string name="bodytext6_6">
-        <![CDATA[
-        Exam section 2<br/>- passed and simulated question for JLPT N5 grammar section 2
-        ]]>
+        Exam section 2\n- passed and simulated question for JLPT N5 grammar section 2
     </string>
     <string name="bodytext6_8">
-        <![CDATA[
-        Exam section 3<br/>- passed and simulated question for JLPT N5 grammar section 3
-        ]]>
+        Exam section 3\n- passed and simulated question for JLPT N5 grammar section 3
     </string>
-
-
+    <string name="tvFeatureSoon">This feature will be available soon....</string>
 </resources>
