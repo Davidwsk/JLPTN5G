@@ -39,5 +39,6 @@ dependencies {
     compile 'com.android.support:design:26.+'
     compile 'com.android.support:support-v4:26.+'
     compile 'com.android.support:recyclerview-v7:26.+'
+    compile 'com.google.android.gms:play-services-ads:11.0.0'
 }
 
