@@ -1,8 +1,13 @@
 package com.iscdasia.smartjlptn5_android;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.android.vending.billing.IInAppBillingService;
 
 
 /**
@@ -63,6 +70,8 @@ public class OptionFragment extends Fragment implements Button.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -73,6 +82,12 @@ public class OptionFragment extends Fragment implements Button.OnClickListener {
 
         Button btnUpdateOption = (Button) view.findViewById(R.id.btnUpdateOption);
         btnUpdateOption.setOnClickListener(this);
+
+        Button btnRemoveAd = (Button) view.findViewById(R.id.btnRemoveAd);
+        btnRemoveAd.setOnClickListener(this);
+
+        Button btnRestorePurchased = (Button) view.findViewById(R.id.btnRestorePurchased);
+        btnRestorePurchased.setOnClickListener(this);
 
         EditText etNoOfQuestion = (EditText)view.findViewById(R.id.etNoOfQuestion);
         etNoOfQuestion.setText("" + CurrentApp.NO_OF_QUESTION);
@@ -123,6 +138,12 @@ public class OptionFragment extends Fragment implements Button.OnClickListener {
                 mFragmentUpdateNoOfQuestionListener.onFragmentUpdateNoOfQuestion(Integer.parseInt(etNoOfQuestion.getText().toString()));
                 createAndShowDialog("Update complete successfully.","");
                 break;
+            case R.id.btnRemoveAd:
+                mListener.onFragmentInteraction("Purchase");
+                break;
+            case R.id.btnRestorePurchased:
+                mListener.onFragmentInteraction("RestorePurchase");
+                break;
             default:
                 break;
         }
@@ -133,6 +154,22 @@ public class OptionFragment extends Fragment implements Button.OnClickListener {
 
         builder.setMessage(message);
         builder.setTitle(title);
+        builder.create().show();
+    }
+
+    private void createAndShowDialog(final String message, final String title,String btnOKText) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.setCancelable(true);
+        builder.setNeutralButton(btnOKText,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
         builder.create().show();
     }
 
