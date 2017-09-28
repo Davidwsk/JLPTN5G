@@ -11,58 +11,112 @@
 <FrameLayout android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{question.QuestionText}" />
-
-        <RadioGroup
-            android:id="@+id/rdoGroupAnswer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/tvDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{question.Description}"
-            android:visibility="invisible"/>
-
-
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:layout_alignParentTop="true"
+            >
+            <!-- TODO: Update blank fragment layout -->
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="17dp"
+                android:text="@{question.QuestionText}"
+                android:layout_margin="5sp"/>
+
+            <RadioGroup
+                android:id="@+id/rdoGroupAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="fill_vertical"
+                android:layout_margin="5sp"
+                >
+            </RadioGroup>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/rlDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10sp"
+                    android:layout_margin="10sp"
+                    android:background="#ADD8E6"
+                    android:layout_centerVertical="true"
+                    >
+
+                    <TextView
+                        android:id="@+id/tvDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{question.Description}"
+                        android:visibility="invisible"
+                        android:textColor="#006400"
+                        android:gravity="center_vertical|center_horizontal"/>
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="5sp"
+            >
+
             <ImageButton
                 android:id="@+id/imgBtnPrevious"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_margin="5sp"
                 android:src="@drawable/ic_previous"
-                android:visibility="invisible"/>
+                android:visibility="gone"
+                />
+
 
             <ImageButton
                 android:id="@+id/imgBtnNext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_next"
-                android:visibility="invisible"/>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5sp"
+                android:visibility="gone" />
+
             <Button
                 android:id="@+id/btnFinish"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Finish"
-                android:visibility="invisible"/>
-        </LinearLayout>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+    </RelativeLayout>
 
-    </LinearLayout>
+
 
 
 </FrameLayout>

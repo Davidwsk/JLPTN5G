@@ -20,6 +20,8 @@ public class CurrentApp {
 
     public static Boolean IsFinished = false;
 
-    public static final String SKU_VALUE  = "android.test.purchased";
+    //    public static final String SKU_VALUE  = "android.test.purchased";
+    public static final String SKU_VALUE = "com.appcrabs.jlptn5g.removeads";
+
 
 }

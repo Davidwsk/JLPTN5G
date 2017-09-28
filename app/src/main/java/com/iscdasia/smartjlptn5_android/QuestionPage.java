@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.iscdasia.smartjlptn5_android.databinding.FragmentQuestionPageBinding;
@@ -93,11 +94,13 @@ public class QuestionPage extends Fragment
         ImageButton prevImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnPrevious);
         ImageButton nextImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnNext);
         TextView descriptionTextView = fragmentQuestionPageBinding.getRoot().findViewById(R.id.tvDescription);
+        RelativeLayout relativeLayoutDescription = fragmentQuestionPageBinding.getRoot().findViewById(R.id.rlDescription);
 
         finishButton.setVisibility(View.INVISIBLE);
         prevImageButton.setVisibility(View.INVISIBLE);
         nextImageButton.setVisibility(View.INVISIBLE);
         descriptionTextView.setVisibility(View.INVISIBLE);
+        relativeLayoutDescription.setVisibility(View.INVISIBLE);
 
         if (CurrentApp.CURRENT_QUESTION_POSITION_ID == 0 && CurrentApp.NO_OF_QUESTION > 1) {
             nextImageButton.setVisibility(View.VISIBLE);
@@ -165,6 +168,7 @@ public class QuestionPage extends Fragment
 
         if (CurrentApp.IsFinished) {
             descriptionTextView.setVisibility(View.VISIBLE);
+            relativeLayoutDescription.setVisibility(View.VISIBLE);
         }
 
         answerArrayList = new ArrayList<QuestionAnswer>();

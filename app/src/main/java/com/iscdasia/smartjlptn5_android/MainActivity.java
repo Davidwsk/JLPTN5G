@@ -211,10 +211,10 @@ public class MainActivity extends AppCompatActivity
 //            ListView listViewToDo = (ListView) findViewById(R.id.listViewToDo);
 //            listViewToDo.setAdapter(mAdapter);
 
-            setUserInformation();
+            boolean IsFirstTimeUse = setUserInformation();
 
             // Load the items from the Mobile Service
-            refreshItemsFromTable(CurrentApp.QUESTION_GROUP_ID, CurrentApp.NO_OF_QUESTION);
+            refreshItemsFromTable(CurrentApp.QUESTION_GROUP_ID, CurrentApp.NO_OF_QUESTION,IsFirstTimeUse);
 
         } catch (MalformedURLException e) {
             createAndShowDialog(new Exception("There was an error creating the Mobile Service. Verify the URL"), "Error");
@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_getQuestion) {
-            refreshItemsFromTable(CurrentApp.QUESTION_GROUP_ID, CurrentApp.NO_OF_QUESTION);
+            refreshItemsFromTable(CurrentApp.QUESTION_GROUP_ID, CurrentApp.NO_OF_QUESTION,false);
             RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list);
             recyclerView.getAdapter().notifyDataSetChanged();
         }
@@ -620,7 +620,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * Refresh the list with the items in the Table
      */
-    private void refreshItemsFromTable(final String questionGroupId, final int noOfQuestions) {
+    private void refreshItemsFromTable(final String questionGroupId, final int noOfQuestions, final boolean isFirstTimeUse) {
 
         // Get the items that weren't marked as completed and add them in the
         // adapter
@@ -677,8 +677,16 @@ public class MainActivity extends AppCompatActivity
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
 
+                if(isFirstTimeUse)
+                {
+                    replaceFragment(AboutFragment.class);
+                }
+                else
+                {
+                    replaceFragment(QuestionListFragment.class);
+                }
 
-                replaceFragment(QuestionListFragment.class);
+
 
 //                //NOTE:  Open fragment1 initially.
 //                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -693,9 +701,10 @@ public class MainActivity extends AppCompatActivity
         runAsyncTask(task);
     }
 
-    private void setUserInformation() {
+    private Boolean setUserInformation() {
 
         String android_id = "12345";
+        Boolean IsFirstTimeUse = false;
         try {
             android_id = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                     Settings.Secure.ANDROID_ID);
@@ -712,6 +721,7 @@ public class MainActivity extends AppCompatActivity
                 newUserInformation.setPurchased_1(false);
                 mLocalUserInformationTable.insert(newUserInformation);
                 userInformationArray.add(newUserInformation);
+                IsFirstTimeUse = true;
             }
 
             CurrentApp.CURRENT_USER_ID = userInformationArray.get(0).getUserName();
@@ -725,6 +735,7 @@ public class MainActivity extends AppCompatActivity
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        return IsFirstTimeUse;
     }
 
     /**
