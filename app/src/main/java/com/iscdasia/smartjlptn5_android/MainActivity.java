@@ -521,6 +521,9 @@ public class MainActivity extends AppCompatActivity
             if(restorePurchase()) {
                 createAndShowDialog("Restore purchase complete successfully.","Restore Successful","OK");
             }
+            else {
+                createAndShowDialog("No purchase item to restore.","Restore Failed","OK");
+            }
         }else {
             getSupportActionBar().setTitle(title);
         }

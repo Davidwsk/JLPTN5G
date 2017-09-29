@@ -19,6 +19,8 @@ import com.iscdasia.smartjlptn5_android.model.Question;
 import com.iscdasia.smartjlptn5_android.viewmodel.QuestionAnswer;
 import com.iscdasia.smartjlptn5_android.viewmodel.UserQuestionStatisticResult;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -91,10 +93,10 @@ public class QuestionPage extends Fragment
         fragmentQuestionPageBinding.setQuestion(currentQuestion);
 
         final Button finishButton = (Button) fragmentQuestionPageBinding.getRoot().findViewById(R.id.btnFinish);
-        ImageButton prevImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnPrevious);
-        ImageButton nextImageButton = fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnNext);
-        TextView descriptionTextView = fragmentQuestionPageBinding.getRoot().findViewById(R.id.tvDescription);
-        RelativeLayout relativeLayoutDescription = fragmentQuestionPageBinding.getRoot().findViewById(R.id.rlDescription);
+        ImageButton prevImageButton = (ImageButton) fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnPrevious);
+        ImageButton nextImageButton = (ImageButton) fragmentQuestionPageBinding.getRoot().findViewById(R.id.imgBtnNext);
+        TextView descriptionTextView = (TextView) fragmentQuestionPageBinding.getRoot().findViewById(R.id.tvDescription);
+        RelativeLayout relativeLayoutDescription = (RelativeLayout) fragmentQuestionPageBinding.getRoot().findViewById(R.id.rlDescription);
 
         finishButton.setVisibility(View.INVISIBLE);
         prevImageButton.setVisibility(View.INVISIBLE);
